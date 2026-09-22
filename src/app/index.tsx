@@ -8,13 +8,19 @@ export default function Index() {
     const [subjects, setSubjects] = useState<Subject[]>([]);
 
     useEffect(() => {
-      getSubjects().then(setSubjects);
+      getSubjects().then((loaded) => {
+        setSubjects((current) => [...loaded, ...current]);
+      });
     }, []);
 
-    function handleAddSubject(subject: Subject) {
+    async function handleAddSubject(subject: Subject) {
       const updated = [...subjects, subject];
       setSubjects(updated);
-      saveSubjects(updated);
+      try {
+        await saveSubjects(updated);
+      } catch (error) {
+        setSubjects(subjects);
+      }
     }
 
     return (
