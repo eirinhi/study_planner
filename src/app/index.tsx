@@ -1,18 +1,34 @@
-import { Text, View, StyleSheet } from "react-native";
+import { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import SubjectForm from '../components/SubjectForm';
+import { Subject } from '../types/models';
+import { getSubjects, saveSubjects } from '../storage/taskStorage';
 
 export default function Index() {
-  return (
-    <View style={styles.container}>
-      <Text>Edit src/app/index.tsx to edit this screen.</Text>
-    </View>
-  );
+    const [subjects, setSubjects] = useState<Subject[]>([]);
+
+    useEffect(() => {
+      getSubjects().then((loaded) => {
+        setSubjects((current) => [...loaded, ...current]);
+      });
+    }, []);
+
+    async function handleAddSubject(subject: Subject) {
+      const updated = [...subjects, subject];
+      setSubjects(updated);
+      try {
+        await saveSubjects(updated);
+      } catch (error) {
+        setSubjects(subjects);
+      }
+    }
+
+    return (
+      <View>
+        <SubjectForm onAdd={handleAddSubject} />
+        {subjects.map((s) => (
+          <Text key={s.id}>{s.name}</Text>
+        ))}
+      </View>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
-
