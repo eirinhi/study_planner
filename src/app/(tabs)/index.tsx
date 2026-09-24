@@ -76,8 +76,8 @@ export default function Index() {
       <View>
         <Text>{getGreeting()}</Text>
 
-        <SubjectForm onAdd={handleAddSubject}/>
-        <TaskForm subjects={subjects} onAdd={handleAddTask}/>
+        {loaded && <SubjectForm onAdd={handleAddSubject} />}
+        {loaded && <TaskForm subjects={subjects} onAdd={handleAddTask} />}
 
         <Text>Upcoming tasks</Text>
         <TaskList tasks={upcomingTasks} subjects={subjects} onToggle={handleToggleTask}/>
