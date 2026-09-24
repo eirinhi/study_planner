@@ -14,5 +14,5 @@ export type Task = {
     title: string;
     deadline: string;
     done: boolean;
-    subjectId: string;
+    subjectId?: string;
 };
