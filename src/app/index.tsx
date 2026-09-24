@@ -48,6 +48,18 @@ export default function Index() {
       }
     }
 
+    async function handleToggleTask(taskId: string) {
+const previous = tasks;
+    const updated = previous.map((t) =>
+      t.id === taskId ? { ...t, done: !t.done } : t
+    );
+    setTasks(updated);
+    try {
+      await saveTasks(updated);
+    } catch (error) {
+      setTasks(previous);
+    }
+
     return (
       <View>
         {loaded && <SubjectForm onAdd={handleAddSubject} />}
@@ -56,7 +68,7 @@ export default function Index() {
         ))}
 
         {loaded && <TaskForm subjects={subjects} onAdd={handleAddTask} />}
-        <TaskList tasks={tasks} subjects={subjects} />
+        <TaskList tasks={tasks} subjects={subjects} onToggle={handleToggleTask}/>
       </View>
     );
 }
