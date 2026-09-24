@@ -1,11 +1,21 @@
-import { useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Subject, Task } from '../types/models';
 import { getSubjects, saveSubjects, getTasks, saveTasks } from '../storage/taskStorage';
 
-export function useAppData() {
+type AppData = {
+    subjects: Subject[];
+    tasks: Task[];
+    loaded: boolean;
+    handleAddSubject: (subject: Subject) => void;
+    handleAddTask: (task: Task) => void;
+    handleToggleTask: (taskId: string) => void;
+};
+
+const AppDataContext = createContext<AppData | undefined>(undefined);
+
+export function AppDataProvider({ children }: { children: ReactNode }) {
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
-
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
@@ -57,5 +67,19 @@ export function useAppData() {
       }
     }
 
-    return { subjects, tasks, loaded, handleAddSubject, handleAddTask, handleToggleTask };
+    return (
+        <AppDataContext.Provider
+            value={{ subjects, tasks, loaded, handleAddSubject, handleAddTask, handleToggleTask }}
+        >
+            {children}
+        </AppDataContext.Provider>
+    );
+}
+
+export function useAppData() {
+    const context = useContext(AppDataContext);
+    if (!context) {
+        throw new Error('useAppData must be used within an AppDataProvider');
+    }
+    return context;
 }

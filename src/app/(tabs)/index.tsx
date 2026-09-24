@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import SubjectForm from '../../components/SubjectForm';
 import TaskForm from '../../components/TaskForm';
-import { getSubjects, getTasks, saveSubjects, saveTasks } from '../../storage/taskStorage';
-import { Subject, Task } from '../../types/models';
 import TaskList from '../../components/TaskList';
 import { useAppData } from '../../hooks/useAppData';
 

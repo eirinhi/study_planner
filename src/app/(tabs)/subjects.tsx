@@ -4,12 +4,12 @@ import { useAppData } from '../../hooks/useAppData';
 import SubjectForm from '../../components/SubjectForm';
 
 export default function Subjects() {
-    const { subjects, handleAddSubject } = useAppData();
+    const { subjects, loaded, handleAddSubject } = useAppData();
     const router = useRouter();
 
     return (
         <View>
-            <SubjectForm onAdd={handleAddSubject}/>
+            {loaded && <SubjectForm onAdd={handleAddSubject}/>}
             <FlatList
                 data={subjects}
                 keyExtractor={(s) => s.id}
