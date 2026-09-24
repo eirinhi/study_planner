@@ -14,7 +14,7 @@ export default function Subjects() {
                 data={subjects}
                 keyExtractor={(s) => s.id}
                 renderItem={({ item }) => (
-                    <Pressable onPress={() => router.push(`/subjects/${item.id}` as any)}>
+                    <Pressable onPress={() => router.push(`/subject/${item.id}`)}>
                         <Text>{item.name}</Text>
                     </Pressable>
                 )}

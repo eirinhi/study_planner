@@ -30,7 +30,8 @@ export default function TabLayout() {
                         <Ionicons name='person' color={color} size={size} />
                     ),
                 }}
-            />   
+            />
+            <Tabs.Screen name='subject/[id]' options={{ href: null }} />   
         </Tabs>
     );
 };
