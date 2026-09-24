@@ -4,6 +4,7 @@ import SubjectForm from '../components/SubjectForm';
 import TaskForm from '../components/TaskForm';
 import { getSubjects, getTasks, saveSubjects, saveTasks } from '../storage/taskStorage';
 import { Subject, Task } from '../types/models';
+import TaskList from '../components/TaskList';
 
 export default function Index() {
     const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -55,9 +56,7 @@ export default function Index() {
         ))}
 
         {loaded && <TaskForm subjects={subjects} onAdd={handleAddTask} />}
-        {tasks.map((t) => (
-          <Text key={t.id}>{t.title} - {t.deadline}</Text>
-        ))}
+        <TaskList tasks={tasks} subjects={subjects} />
       </View>
     );
 }
