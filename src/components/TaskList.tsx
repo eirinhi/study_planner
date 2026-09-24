@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { Task, Subject } from '../types/models';
 
 type Props = {
@@ -12,14 +12,16 @@ export default function TaskList({ tasks, subjects }: Props) {
     }
 
     return (
-        <View>
-            {tasks.map((t) => (
-                <View key={t.id}>
-                    <Text>{t.title}</Text>
-                    <Text>{getSubjectName(t.subjectId)}</Text>
-                    <Text>{t.deadline}</Text>
+        <FlatList
+            data={tasks}
+            keyExtractor={(task) => task.id}
+            renderItem={({ item }) => (
+                <View>
+                    <Text>{item.title}</Text>
+                    <Text>{getSubjectName(item.subjectId)}</Text>
+                    <Text>{item.deadline}</Text>
                 </View>
-            ))}
-        </View>
+            )}
+        />
     );
 }
