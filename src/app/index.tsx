@@ -1,33 +1,62 @@
-import { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
 import SubjectForm from '../components/SubjectForm';
-import { Subject } from '../types/models';
-import { getSubjects, saveSubjects } from '../storage/taskStorage';
+import TaskForm from '../components/TaskForm';
+import { getSubjects, getTasks, saveSubjects, saveTasks } from '../storage/taskStorage';
+import { Subject, Task } from '../types/models';
 
 export default function Index() {
     const [subjects, setSubjects] = useState<Subject[]>([]);
+    const [tasks, setTasks] = useState<Task[]>([]);
+
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-      getSubjects().then((loaded) => {
-        setSubjects((current) => [...loaded, ...current]);
-      });
+      Promise.all([getSubjects(), getTasks()])
+        .then(([loadedSubjects, loadedTasks]) => {
+          setSubjects(loadedSubjects);
+          setTasks(loadedTasks);
+        })
+        .catch(() => {})
+        .finally(() => setLoaded(true));
     }, []);
 
     async function handleAddSubject(subject: Subject) {
-      const updated = [...subjects, subject];
-      setSubjects(updated);
+      let updated: Subject[] = [];
+      setSubjects((current) => {
+        updated = [...current, subject];
+        return updated;
+      })
       try {
         await saveSubjects(updated);
       } catch (error) {
-        setSubjects(subjects);
+        setSubjects((current) => current.filter((s) => s.id !== subject.id));
+      }
+    }
+    
+    async function handleAddTask(task: Task) {
+      let updated: Task[] = [];
+      setTasks((current) => {
+        updated = [...current, task];
+        return updated;
+      })
+      try {
+        await saveTasks(updated);
+      } catch (error) {
+        setTasks((current) => current.filter((t) => t.id !== task.id));
       }
     }
 
     return (
       <View>
-        <SubjectForm onAdd={handleAddSubject} />
+        {loaded && <SubjectForm onAdd={handleAddSubject} />}
         {subjects.map((s) => (
           <Text key={s.id}>{s.name}</Text>
+        ))}
+
+        {loaded && <TaskForm subjects={subjects} onAdd={handleAddTask} />}
+        {tasks.map((t) => (
+          <Text key={t.id}>{t.title} - {t.deadline}</Text>
         ))}
       </View>
     );
