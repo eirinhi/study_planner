@@ -22,22 +22,28 @@ export default function Index() {
     }, []);
 
     async function handleAddSubject(subject: Subject) {
-      const updated = [...subjects, subject];
-      setSubjects(updated);
+      let updated: Subject[] = [];
+      setSubjects((current) => {
+        updated = [...current, subject];
+        return updated;
+      })
       try {
         await saveSubjects(updated);
       } catch (error) {
-        setSubjects(subjects);
+        setSubjects((current) => current.filter((s) => s.id !== subject.id));
       }
     }
     
     async function handleAddTask(task: Task) {
-      const updated = [...tasks, task];
-      setTasks(updated);
+      let updated: Task[] = [];
+      setTasks((current) => {
+        updated = [...current, task];
+        return updated;
+      })
       try {
         await saveTasks(updated);
       } catch (error) {
-        setTasks(tasks);
+        setTasks((current) => current.filter((t) => t.id !== task.id));
       }
     }
 
