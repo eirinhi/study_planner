@@ -61,15 +61,26 @@ export default function Index() {
       }
     }
 
+    function getGreeting() {
+        const hour = new Date().getHours();
+        return hour < 12 ? 'Good morning!' : hour < 18 ? 'Good afternoon!' : 'Good evening!';
+    }
+
+    const upcomingTasks = [...tasks]
+        .filter((t) => !t.done)
+        .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
+        .slice(0, 5);
+
+
     return (
       <View>
-        {loaded && <SubjectForm onAdd={handleAddSubject} />}
-        {subjects.map((s) => (
-          <Text key={s.id}>{s.name}</Text>
-        ))}
+        <Text>{getGreeting()}</Text>
 
-        {loaded && <TaskForm subjects={subjects} onAdd={handleAddTask} />}
-        <TaskList tasks={tasks} subjects={subjects} onToggle={handleToggleTask}/>
+        <SubjectForm onAdd={handleAddSubject}/>
+        <TaskForm subjects={subjects} onAdd={handleAddTask}/>
+
+        <Text>Upcoming tasks</Text>
+        <TaskList tasks={upcomingTasks} subjects={subjects} onToggle={handleToggleTask}/>
       </View>
     );
 }
