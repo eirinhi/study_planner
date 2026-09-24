@@ -13,9 +13,18 @@ export default function TaskList({ tasks, subjects, onToggle }: Props) {
         return subjects.find((s) => s.id === subjectId)?.name ?? 'Unknown';
     }
 
+    function formatDeadline(deadline: string) {
+        const date = new Date(deadline);
+        return date.toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'});
+    }
+
+    const sortedTasks = [...tasks].sort(
+        (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    );
+
     return (
         <FlatList
-            data={tasks}
+            data={sortedTasks}
             keyExtractor={(task) => task.id}
             renderItem={({ item }) => (
                 <View>
