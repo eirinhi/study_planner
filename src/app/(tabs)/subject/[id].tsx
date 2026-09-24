@@ -20,7 +20,7 @@ export default function SubjectDetail() {
     return (
         <View>
             <Text>{subject?.name ?? 'Unknown subject'}</Text>
-            <TaskForm subjects={subjects} onAdd={handleAddTask} />
+            {subject && <TaskForm subjects={[subject]} onAdd={handleAddTask} />}
             <TaskList tasks={subjectTask} subjects={subjects} onToggle={handleToggleTask} />
         </View>
     );
