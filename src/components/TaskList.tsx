@@ -14,7 +14,8 @@ export default function TaskList({ tasks, subjects, onToggle }: Props) {
     }
 
     function formatDeadline(deadline: string) {
-        const date = new Date(deadline);
+        const [year, month, day] = deadline.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
         return date.toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'});
     }
 
@@ -35,7 +36,7 @@ export default function TaskList({ tasks, subjects, onToggle }: Props) {
                     />
                     <Text>{item.title}</Text>
                     <Text>{getSubjectName(item.subjectId)}</Text>
-                    <Text>{item.deadline}</Text>
+                    <Text>{formatDeadline(item.deadline)}</Text>
                 </View>
             )}
         />
