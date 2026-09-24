@@ -9,14 +9,16 @@ export default function Index() {
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
 
-    useEffect(() => {
-      getSubjects().then((loaded) => {
-        setSubjects((current) => [...loaded, ...current]);
-      });
+    const [loaded, setLoaded] = useState(false);
 
-      getTasks().then((loaded) => {
-        setTasks((current) => [...loaded, ...current]);
-      });
+    useEffect(() => {
+      Promise.all([getSubjects(), getTasks()])
+        .then(([loadedSubjects, loadedTasks]) => {
+          setSubjects(loadedSubjects);
+          setTasks(loadedTasks);
+        })
+        .catch(() => {})
+        .finally(() => setLoaded(true));
     }, []);
 
     async function handleAddSubject(subject: Subject) {
@@ -41,12 +43,12 @@ export default function Index() {
 
     return (
       <View>
-        <SubjectForm onAdd={handleAddSubject} />
+        {loaded && <SubjectForm onAdd={handleAddSubject} />}
         {subjects.map((s) => (
           <Text key={s.id}>{s.name}</Text>
         ))}
 
-        <TaskForm subjects={subjects} onAdd={handleAddTask} />
+        {loaded && <TaskForm subjects={subjects} onAdd={handleAddTask} />}
         {tasks.map((t) => (
           <Text key={t.id}>{t.title} - {t.deadline}</Text>
         ))}
