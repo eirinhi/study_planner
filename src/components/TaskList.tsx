@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { Task, Subject } from '../types/models';
 import CheckBox from 'expo-checkbox';
 
