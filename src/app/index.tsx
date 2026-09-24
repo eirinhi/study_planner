@@ -48,6 +48,23 @@ export default function Index() {
       }
     }
 
+    async function handleToggleTask(taskId: string) {
+      let updated: Task[] = [];
+      setTasks((current) => {
+        updated = current.map((t) =>
+          t.id === taskId ? {...t, done: !t.done} : t
+        );
+        return updated;
+      });
+      try {
+        await saveTasks(updated);
+      } catch (error) {
+        setTasks((current) =>
+          current.map((t) => (t.id === taskId ? {...t, done: !t.done} : t))
+        );
+      }
+    }
+
     return (
       <View>
         {loaded && <SubjectForm onAdd={handleAddSubject} />}
@@ -56,7 +73,7 @@ export default function Index() {
         ))}
 
         {loaded && <TaskForm subjects={subjects} onAdd={handleAddTask} />}
-        <TaskList tasks={tasks} subjects={subjects} />
+        <TaskList tasks={tasks} subjects={subjects} onToggle={handleToggleTask}/>
       </View>
     );
 }
