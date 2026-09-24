@@ -23,7 +23,7 @@ export default function TaskForm({ subjects, onAdd }: Props) {
         onAdd({
             id: Date.now().toString(),
             title: title.trim(),
-            deadline: deadline.toISOString().split('T')[0],
+            deadline: `${deadline.getFullYear()}-${String(deadline.getMonth() + 1).padStart(2, '0')}-${String(deadline.getDate()).padStart(2, '0')}`,
             done: false,
             subjectId,
         });
