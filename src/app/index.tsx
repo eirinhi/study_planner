@@ -49,15 +49,16 @@ export default function Index() {
     }
 
     async function handleToggleTask(taskId: string) {
-const previous = tasks;
-    const updated = previous.map((t) =>
-      t.id === taskId ? { ...t, done: !t.done } : t
-    );
-    setTasks(updated);
-    try {
-      await saveTasks(updated);
-    } catch (error) {
-      setTasks(previous);
+      const previous = tasks;
+      const updated = previous.map((t) =>
+        t.id === taskId ? { ...t, done: !t.done } : t
+      );
+      setTasks(updated);
+      try {
+        await saveTasks(updated);
+      } catch (error) {
+        setTasks(previous);
+      }
     }
 
     return (

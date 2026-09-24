@@ -13,9 +13,19 @@ export default function TaskList({ tasks, subjects, onToggle }: Props) {
         return subjects.find((s) => s.id === subjectId)?.name ?? 'Unknown';
     }
 
+    function formatDeadline(deadline: string) {
+        const [year, month, day] = deadline.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        return date.toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'});
+    }
+
+    const sortedTasks = [...tasks].sort(
+        (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    );
+
     return (
         <FlatList
-            data={tasks}
+            data={sortedTasks}
             keyExtractor={(task) => task.id}
             renderItem={({ item }) => (
                 <View>
@@ -26,7 +36,7 @@ export default function TaskList({ tasks, subjects, onToggle }: Props) {
                     />
                     <Text>{item.title}</Text>
                     <Text>{getSubjectName(item.subjectId)}</Text>
-                    <Text>{item.deadline}</Text>
+                    <Text>{formatDeadline(item.deadline)}</Text>
                 </View>
             )}
         />
