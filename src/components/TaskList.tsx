@@ -22,6 +22,7 @@ export default function TaskList({ tasks, subjects, onToggle }: Props) {
                     <CheckBox
                         value={item.done}
                         onValueChange={() => onToggle(item.id)}
+                        accessibilityLabel={item.title}
                     />
                     <Text>{item.title}</Text>
                     <Text>{getSubjectName(item.subjectId)}</Text>
