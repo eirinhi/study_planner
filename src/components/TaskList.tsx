@@ -27,6 +27,10 @@ export default function TaskList({ tasks, subjects, onToggle, header, footer, so
         return date.toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'});
     }
 
+    function isOverdue(task: Task) {
+        return !task.done && task.deadline < new Date().toLocaleDateString('sv-SE');
+    }
+
     const sortedTasks = [...tasks].sort(
         (a, b) =>
             (sortDoneLast ? Number(a.done) - Number(b.done) : 0) ||
@@ -76,8 +80,8 @@ export default function TaskList({ tasks, subjects, onToggle, header, footer, so
                                 </View>
                             )}
                             <View style={styles.deadline}>
-                                <Ionicons name='calendar-outline' size={13} color={colors.textSecondary} />
-                                <Text style={styles.deadlineText}>
+                                <Ionicons name='calendar-outline' size={13} color={isOverdue(item) ? colors.danger : colors.textSecondary} />
+                                <Text style={[styles.deadlineText, isOverdue(item) && styles.overdue]}>
                                     {formatDeadline(item.deadline)}
                                 </Text>
                             </View>
@@ -143,5 +147,9 @@ const styles = StyleSheet.create({
     deadlineText: {
         fontSize: typography.caption.fontSize,
         color: colors.textSecondary,
+    },
+    overdue: {
+        color: colors.danger,
+        fontWeight: '600',
     },
 });
