@@ -1,56 +1,62 @@
-# Welcome to your Expo app 👋
+# Study Planner
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile app for keeping track of study tasks and deadlines across subjects.
 
-## Get started
+Study Planner helps students see what's due, when, and for which course — all in one place.
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- Add subjects and see them as a folder grid
+- Add tasks with a title, deadline and an optional subject
+- Mark tasks as done with a checkbox
+- Home screen with a greeting and your next upcoming deadlines
+- Per-subject screen with its tasks and a progress summary
+- Overdue deadlines are highlighted in red
+- Confirmation message when a task or subject is added
+- Data is saved locally on the device between sessions
 
-2. Start the app
 
-   ```bash
-   npx expo start
-   ```
+## Tech stack
 
-In the output, you'll find options to open the app in a
+- [Expo](https://expo.dev) / React Native with TypeScript
+- [Expo Router](https://docs.expo.dev/router/introduction/) for file-based navigation
+- AsyncStorage for local storage
+- expo-checkbox, @react-native-community/datetimepicker, @expo/vector-icons, react-native-reanimated
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Getting started
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Requires [Node.js](https://nodejs.org) and either the [Expo Go](https://expo.dev/go) app on your phone or an iOS simulator / Android emulator.
 
 ```bash
-npm run reset-project
+git clone https://github.com/eirinhi/study_planner.git
+cd study_planner
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Scan the QR code in the terminal to open the iOS simulator or Android emulator.
 
-### Other setup steps
+## Project structure
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```
+src/
+├── app/          Screens and navigation (Expo Router)
+├── components/   Reusable UI components (forms, task list, toast)
+├── hooks/        App state (subjects and tasks)
+├── storage/      Reading and writing data with AsyncStorage
+├── types/        TypeScript types
+└── theme.ts      Colors, spacing, typography and shared styles
+```
 
-## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
+## Future plans
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- User accounts and authentication – allow multiple users, each with their own private data, instead of a single local dataset
+- Backend/database storage – move from local AsyncStorage to a proper backend (e.g. the NestJS + Prisma + Supabase setup), enabling data sync across devices
+- Task tags/categories – let users tag tasks (e.g. "exam", "assignment", "reading") to filter and organize beyond just subject
+- Push notifications/reminders – notify users before a deadline
+- Recurring tasks – support tasks that repeat weekly (e.g. weekly reading assignments)
+- Calendar view – visualize tasks on a calendar instead of just a list
+- Dark mode support
+- Calendar integration – add tasks directly to the device's calendar (or sync with Google Calendar) so deadlines show up alongside other commitments
+- Study statistics – simple stats on completed vs. pending tasks, or tasks per subject, to visualize workload
