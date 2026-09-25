@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Subject, Task } from '../types/models';
 import { getSubjects, saveSubjects, getTasks, saveTasks } from '../storage/taskStorage';
+import { useToast } from '../components/Toast';
 
 type AppData = {
     subjects: Subject[];
@@ -17,6 +18,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [loaded, setLoaded] = useState(false);
+    const { showToast } = useToast();
 
     useEffect(() => {
       Promise.all([getSubjects(), getTasks()])
@@ -36,6 +38,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       })
       try {
         await saveSubjects(updated);
+        showToast(`Subject "${subject.name}" added`);
       } catch (error) {
         setSubjects((current) => current.filter((s) => s.id !== subject.id));
       }
@@ -49,6 +52,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       })
       try {
         await saveTasks(updated);
+        showToast('Task added');
       } catch (error) {
         setTasks((current) => current.filter((t) => t.id !== task.id));
       }
